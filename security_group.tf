@@ -8,7 +8,7 @@ resource "aws_security_group" "ansible_server" {
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
-    cidr_blocks      = ["103.91.88.205/32"]
+    cidr_blocks      = ["192.168.43.100/32"]
   }
   
   ingress {
@@ -16,7 +16,7 @@ resource "aws_security_group" "ansible_server" {
     from_port        = 22
     to_port          = 22
     protocol         = "tcp"
-    cidr_blocks      = ["103.91.88.205/32"]
+    cidr_blocks      = ["192.168.43.100/32"]
   }
   
   egress {
