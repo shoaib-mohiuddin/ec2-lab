@@ -1,5 +1,5 @@
 [web]
-52.17.154.241
+99.81.44.10
 
 [web:vars]
 ansible_user=ubuntu
