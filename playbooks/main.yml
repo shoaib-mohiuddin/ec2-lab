@@ -1,3 +1,33 @@
+# ---
+# - hosts: web
+#   become: true
+#   tasks:
+#     - name: Update the apt-get
+#       apt:
+#         update_cache: yes
+#     - name: Install apache2
+#       apt:
+#         name: apache2
+#         state: present
+#     - name: Copy my index page
+#       copy:
+#         src: "index.html"
+#         dest: "/var/www/html/index.html"
+#     - name: Restart apache2 server
+#       service:
+#         name: apache2
+#         state: restarted
+
+# # ---
+# # - name: Install apache
+# #   hosts: web
+# #   become: true
+# #   tasks:
+# #     - name: install apache
+# #       apt:
+# #         name: apache2
+# #         state: present
+
 ---
 - hosts: web
   become: true
@@ -5,25 +35,36 @@
     - name: Update the apt-get
       apt:
         update_cache: yes
+
     - name: Install apache2
       apt:
-        name: apache2
+        name: "apache2"
         state: present
-    - name: Copy my index page
+
+    - name: Create a directory if it does not exist
+      file:
+        path: "{{ website_path }}"
+        state: directory
+
+    - name: Copy new temple file index.html.j2 file
+      template:
+        src: "index.html.j2"
+        dest: "{{ website_path }}/index.html"
+
+    - name: Copy configuration file for apache
       copy:
-        src: "index.html"
-        dest: "/var/www/html/index.html"
+        src: "shoaib.conf"
+        dest: "/etc/apache2/sites-available/shoaib.conf"
+
+    - name: Enable site for shoaib.conf
+      command:
+        a2ensite shoaib.conf
+
+    - name: Disable site for default.conf
+      command:
+        a2dissite 000-default.conf
+
     - name: Restart apache2 server
       service:
         name: apache2
         state: restarted
-
-# ---
-# - name: Install apache
-#   hosts: web
-#   become: true
-#   tasks:
-#     - name: install apache
-#       apt:
-#         name: apache2
-#         state: present
